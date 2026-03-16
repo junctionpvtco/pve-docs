@@ -158,6 +158,10 @@ api-viewer/apidoc.js: $(API_VIEWER_FILES)
 	cat $(API_VIEWER_FILES) >$@.tmp
 	mv $@.tmp $@
 
+api-viewer/pve-api-openapi.json: api-viewer/apidata.js scripts/convert-apidata-to-openapi.js
+	node scripts/convert-apidata-to-openapi.js >$@.tmp
+	mv $@.tmp $@
+
 $(BUILDDIR):
 	rm -rf $@ $@.tmp
 	rsync -a * $@.tmp/
@@ -264,6 +268,7 @@ clean:
 	rm -rf *.html *.pdf *.epub *.tmp *.1 *.5 *.8
 	rm -f *.deb *.dsc *.tar.* *.changes *.buildinfo *.build
 	rm -f api-viewer/apidoc.js chapter-*.html *-plain.html chapter-*.html pve-admin-guide.chunked asciidoc-pve link-refs.json .asciidoc-pve-tmp_* pve-docs-mediawiki-import
+	rm -f api-viewer/pve-api-openapi.json
 	rm -rf .pve-doc-depends
 	rm -f pve-doc-generator.mk chapter-index-table.adoc man1-index-table.adoc man5-index-table.adoc man8-index-table.adoc pve-admin-guide-docinfo.xml
 	rm -rf $(DEB_SOURCE)-[0-9]*/
