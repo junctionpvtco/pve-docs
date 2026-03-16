@@ -50,7 +50,7 @@ function coerceNumericStrings(obj) {
     if (obj !== null && typeof obj === 'object') {
         const out = {};
         for (const [k, v] of Object.entries(obj)) {
-            out[k] = NUMERIC_KEYS.has(k) && typeof v === 'string' ? Number(v) : coerceNumericStrings(v);
+            out[k] = NUMERIC_KEYS.has(k) && typeof v === 'string' && !isNaN(Number(v)) ? Number(v) : coerceNumericStrings(v);
         }
         return out;
     }
@@ -200,9 +200,9 @@ function walk(node) {
 
             // operationId
             if (opInfo.name) {
-                // Create a unique operationId from path + method name
+                // Create a unique operationId from method + path + name
                 const pathId = apiPath.replace(/[{}\/]/g, '_').replace(/^_|_$/g, '');
-                operation.operationId = `${pathId}_${opInfo.name}`;
+                operation.operationId = `${method}_${pathId}_${opInfo.name}`;
             }
 
             // description
@@ -221,8 +221,8 @@ function walk(node) {
                 operation['x-pve-permissions'] = opInfo.permissions;
                 const permStr = formatPermissions(opInfo.permissions);
                 if (permStr) {
-                    operation.description =
-                        (operation.description || '') + `\n\nPermissions: ${permStr}`;
+                operation.description =
+                        (operation.description ? operation.description + '\n\n' : '') + `Permissions: ${permStr}`;
                 }
             }
 
