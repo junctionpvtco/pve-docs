@@ -11,6 +11,7 @@
 /#*#
 /.pve-doc-depends
 /api-viewer/apidoc.js
+/api-viewer/pve-api-openapi.json
 /asciidoc-pve
 /chapter-index-table.adoc
 /link-refs.json
